@@ -1,185 +1,48 @@
 
-variable "prefix" {
-  default = "VMtest"
-}
-
-locals {
-  vm_name = "${var.prefix}-vm"
-}
 terraform { 
+
   required_providers { 
+
     azurerm = { 
+
       source  = "hashicorp/azurerm" 
+
       version = "=2.46.0" 
+
     } 
+
   } 
-    backend "azurerm" {   
-        resource_group_name  = "nt-poc-akshaya"
-        storage_account_name = "sinkstrgadf" 
-        container_name       = "terra" 
-        key                  = "vm/terraform.tfstate" 
-    } 
-} 
 
-data "terraform_remote_state" "ntw" {  
-    backend = "azurerm" 
-    config = {  
+    backend "azurerm" { 
+
         resource_group_name  = "nt-poc-akshaya" 
-        storage_account_name = "sinkstrgadf" 
-        container_name       = "terra" 
-        key                  = "ntwg/terraform.tfstate"
-    } 
 
- }
+        storage_account_name = "sinkstrgadf" 
+
+        container_name       = "terra" 
+
+        key                  = "rg/terraform.tfstate" 
+
+    } 
+    
+    }
+
+  
+resource "azurerm_resource_group" "rgmani" { 
+
+  name     = "maniislearning" 
+
+  location = "Central India" 
+
+} 
+  
+
 provider "azurerm" { 
 
   features {} 
 
 }
 
-## Create Network Security Group and rule
-resource "azurerm_network_security_group" "vm_nsg" {
-  name                = "Vmtest-nsg"
-  location            = data.terraform_remote_state.ntw.outputs.resource_group_region
-  resource_group_name = data.terraform_remote_state.ntw.outputs.resource_group_name
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 300
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-  security_rule {
-    name                        = "UI_Https_443"
-    priority                    = 310
-    direction                   = "Inbound"
-    access                      = "Allow"
-    protocol                    = "*"
-    source_port_range           = "*"
-    destination_port_range      = "443"
-    source_address_prefix       = "VirtualNetwork"
-    destination_address_prefix  = "*"
-  }
-  security_rule {
-    name                        = "UI_Https_80"
-    priority                    = 311
-    direction                   = "Inbound"
-    access                      = "Allow"
-    protocol                    = "*"
-    source_port_range           = "*"
-    destination_port_range      = "80"
-    source_address_prefix       = "VirtualNetwork"
-    destination_address_prefix  = "*"
-  }
-  
-}
-
-resource "azurerm_public_ip" "vm_publicIP" {
-    name                         = "VmTest-pubip"
-    location                     = data.terraform_remote_state.ntw.outputs.resource_group_region
-    resource_group_name          = data.terraform_remote_state.ntw.outputs.resource_group_name
-    allocation_method            = "Dynamic"
-}
-
-resource "azurerm_network_interface" "nai_vm_nic" {
-  name                = "Vmtest-nic"
-  location            = data.terraform_remote_state.ntw.outputs.resource_group_region
-  resource_group_name = data.terraform_remote_state.ntw.outputs.resource_group_name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = data.terraform_remote_state.ntw.outputs.subnet_id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.vm_publicIP.id
-  }
-}
-
-resource "azurerm_network_interface_security_group_association" "nic_nsg_link" {
-  network_interface_id      = azurerm_network_interface.nai_vm_nic.id
-  network_security_group_id = azurerm_network_security_group.vm_nsg.id
-}
 
 
-resource "azurerm_virtual_machine" "VMtest" {
-  name                  = local.vm_name
-  location              = data.terraform_remote_state.ntw.outputs.resource_group_region
-  resource_group_name   = data.terraform_remote_state.ntw.outputs.resource_group_name
-  network_interface_ids =  [
-    azurerm_network_interface.nai_vm_nic.id,
-  ]
-  vm_size               = "Standard_F4"
-  
-  delete_os_disk_on_termination = true
 
-  storage_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
-#   storage_image_reference {
-#   publisher = "Canonical"
-#   offer     = "UbuntuServer"
-#   sku       = "20.04-LTS"  # FIXME SKU doesn't exist in westeurope
-#   version   = "latest"
-# }
-
-  storage_os_disk {
-    name              = "myosdisk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-
-  os_profile {
-    computer_name  = local.vm_name
-    admin_username = "azureuser"
-    admin_password = "Password1234!"
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-}
-
-resource "azurerm_managed_disk" "VMtest" {
-  name                 = "${local.vm_name}-datadrive"
-  location             = data.terraform_remote_state.ntw.outputs.resource_group_region
-  resource_group_name  = data.terraform_remote_state.ntw.outputs.resource_group_name
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = 100
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "VMtest" {
-  managed_disk_id    = azurerm_managed_disk.VMtest.id
-  virtual_machine_id = azurerm_virtual_machine.VMtest.id
-  lun                = 10
-  caching            = "ReadWrite"
-}
-
-resource "azurerm_virtual_machine_extension" "mount_Disk" {
-  name                 = join("-", ["mount_Disk", formatdate("YYYYMMDDhhmm", timestamp())] )
-  virtual_machine_id = azurerm_virtual_machine.VMtest.id
-  publisher            = "Microsoft.Azure.Extensions"
-  type                 = "CustomScript"
-  type_handler_version = "2.0"
-
-  settings = <<SETTINGS
-    {
-        "script": "${filebase64("mountdisk.sh")}"
-    }
-SETTINGS
-  depends_on = [
-    azurerm_virtual_machine_data_disk_attachment.VMtest
-  ]
-}
-
-output "public_ip" {
-  value = azurerm_public_ip.vm_publicIP.ip_address
-}
