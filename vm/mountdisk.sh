@@ -19,7 +19,7 @@ cd /datadrive/; wget "https://sinkstrgadf.blob.core.windows.net/sink/extractfile
 cd /datadrive/; chmod -R 777 extractfile_mani.sh; ./extractfile_mani.sh
 sleep 5
 
-cd /datadrive/; chmod -R 777 bashrc_set.sh; ./bashrc_set.sh
+cd /datadrive/; chmod -R 777 bashrc_set2.sh; ./bashrc_set2.sh
 
 sleep 3
 source ~/.bashrc
