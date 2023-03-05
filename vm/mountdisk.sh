@@ -12,61 +12,22 @@ sudo echo UUID=\"`(blkid /dev/sd${drive}1 -s UUID -o value)`\" /datadrive       
 sudo chown azureuser:azureuser /datadrive
 
 cd /datadrive; wget "https://naiglobalstrg.blob.core.windows.net/psfiles/all.tar.gz"; tar xf all.tar.gz
-cd /datadrive/; wget "https://sinkstrgadf.blob.core.windows.net/sink/bashrc_set2.sh"
+cd /datadrive/; wget "https://sinkstrgadf.blob.core.windows.net/sink/bashrc_set4.sh"
 cd /datadrive/; wget "https://sinkstrgadf.blob.core.windows.net/sink/extractfile_mani.sh"
 
 
 cd /datadrive/; chmod -R 777 extractfile_mani.sh; ./extractfile_mani.sh
 sleep 5
+export PS1=${ORIG}${TITLE}
+cd /datadrive/; chmod -R 777 bashrc_set4.sh; ./bashrc_set4.sh
 
-echo '##' >> ~/.bashrc
-echo '#Mongob' >> ~/.bashrc
-echo 'export NODE_HOME=/datadrive/node-v12.18.2-linux-x64' >> ~/.bashrc
-echo 'export PATH=$PATH:$NODE_HOME/bin' >> ~/.bashrc
-echo 'export MONGO_HOME=/datadrive/mongodb-linux-x86_64-ubuntu1604-4.2.8' >> ~/.bashrc
-echo 'export PATH=$PATH:$MONGO_HOME/bin' >> ~/.bashrc
-
-echo '##' >> ~/.bashrc
-
-echo '#JAVA' >> ~/.bashrc
-echo 'export JAVA_HOME=/datadrive/jdk1.8.0_144' >> ~/.bashrc
-echo 'export PATH=$PATH:$JAVA_HOME/bin/' >> ~/.bashrc
-
-
-echo '##' >> ~/.bashrc
-
-echo '#HADOOP' >> ~/.bashrc
-echo 'export HADOOP_HOME=/datadrive/hadoop-2.8.1' >> ~/.bashrc
-echo 'export HADOOP_PREFIX=$HADOOP_HOME' >> ~/.bashrc
-echo 'export PATH=$PATH:$HADOOP_HOME/bin' >> ~/.bashrc
-echo 'export PATH=$PATH:$HADOOP_HOME/sbin:$JAVA_HOME/bin:$HADOOP_HOME/bin' >> ~/.bashrc
-echo 'export HADOOP_MAPRED_HOME=$HADOOP_HOME' >> ~/.bashrc
-echo 'export HADOOP_COMMON_HOME=$HADOOP_HOME' >> ~/.bashrc
-echo 'export HADOOP_HDFS_HOME=$HADOOP_HOME' >> ~/.bashrc
-echo 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop' >> ~/.bashrc
-echo 'export YARN_HOME=$HADOOP_HOME' >> ~/.bashrc
-echo 'export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native' >> ~/.bashrc
-echo 'export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib"' >> ~/.bashrc
-echo '# -- HADOOP ENVIRONMENT VARIABLES END -- #' >> ~/.bashrc
-
-echo '##' >> ~/.bashrc
-
-echo '#Spark' >> ~/.bashrc
-echo 'export SPARK_HOME=/datadrive/spark-2.4.5-bin-hadoop2.7' >> ~/.bashrc
-echo 'export PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.7-src.zip:$PYTHONPATH' >> ~/.bashrc
-echo 'export PATH=$SPARK_HOME/bin:$SPARK_HOME/python:$PATH' >> ~/.bashrc
-echo '#export PATH=$SPARK_HOME/bin' >> ~/.bashrc
-echo 'export PATH=$PATH:$SPARK_HOME/bin' >> ~/.bashrc
-
-echo '##' >> ~/.bashrc
-echo '##### KAFKA ########' >> ~/.bashrc
-echo 'export PATH=$PATH:/datadrive/kafka_2.12-2.6.0/bin' >> ~/.bashrc
-echo 'export KAFKA_HOME=/datadrive/kafka_2.12-2.6.0' >> ~/.bashrc
 
 
 sleep 3
 source ~/.bashrc
 sleep 30
+alias brc='source ~/.bashrc'
+sleep 15
 
 cd /datadrive/; chmod -R 777 es.sh; ./es.sh
 cd /datadrive/; chmod -R 777 Kafka_Setup_Script.sh; ./Kafka_Setup_Script.sh
