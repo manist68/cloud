@@ -18,7 +18,7 @@ terraform {
         backend "azurerm" {   
         resource_group_name  = "nt-poc-akshaya"
         storage_account_name = "sinkstrgadf" 
-        container_name       = "terra" 
+        container_name       = "cloud" 
         key                  = "nt/terraform.tfstate" 
     } 
 } 
@@ -28,7 +28,7 @@ data "terraform_remote_state" "rg" {
   config = {
         resource_group_name  = "nt-poc-akshaya"
         storage_account_name = "sinkstrgadf" 
-        container_name       = "terra"  
+        container_name       = "cloud"  
         key                  = "rg/terraform.tfstate"  
   }
 }
