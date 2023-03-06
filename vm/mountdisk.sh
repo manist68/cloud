@@ -50,15 +50,14 @@ source ~/.bashrc
 
 sleep 3
 
-cd /datadrive/; sudo chmod -R 777 es.sh; source es.sh
-cd /datadrive/; sudo chmod -R 777 Kafka_Setup_Script.sh; sudo ./Kafka_Setup_Script.sh
-cd /datadrive/; chmod -R 777 jupyter.sh; ./jupyter.sh
-cd /datadrive/; chmod -R 777 python_R_sap.sh; ./python_R_sap.sh
-cd /datadrive/; chmod -R 777 Drool_Step_2.sh; ./Drool_Step_2.sh
-#sed -i 's/10.2.0.7/'172.16.1.68'/g' /datadrive/all_tomcat/apache-tomcat-drools-8.5/bin/setenv.sh
-#cd /datadrive/all_tomcat/apache-tomcat-drools-8.5/bin; ./startup.sh
+# cd /datadrive/; sudo chmod -R 777 es.sh; source es.sh
+# cd /datadrive/; sudo chmod -R 777 Kafka_Setup_Script.sh; sudo ./Kafka_Setup_Script.sh
+# cd /datadrive/; chmod -R 777 jupyter.sh; ./jupyter.sh
+# cd /datadrive/; chmod -R 777 python_R_sap.sh; ./python_R_sap.sh
+# cd /datadrive/; chmod -R 777 Drool_Step_2.sh; ./Drool_Step_2.sh
+# cd /datadrive/; chmod -R 777 mongod.sh; ./mongod.sh
+# cd /datadrive/; chmod -R 777 install_hadoop.sh; ./install_hadoop.sh
+# cd /datadrive/; chmod -R 777 nginx.sh; ./nginx.sh
+# cd /datadrive/; chmod -R 777 monitoringAndSAS.sh; ./monitoringAndSAS.sh
 
-cd /datadrive/; chmod -R 777 mongod.sh; ./mongod.sh
-cd /datadrive/; chmod -R 777 install_hadoop.sh; ./install_hadoop.sh
-cd /datadrive/; chmod -R 777 nginx.sh; ./nginx.sh
-cd /datadrive/; chmod -R 777 monitoringAndSAS.sh; ./monitoringAndSAS.sh
+bash es.sh;sudo bash Kafka_Setup_Script.sh; bash mongod.sh
