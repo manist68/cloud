@@ -60,4 +60,4 @@ sleep 3
 # cd /datadrive/; chmod -R 777 nginx.sh; ./nginx.sh
 # cd /datadrive/; chmod -R 777 monitoringAndSAS.sh; ./monitoringAndSAS.sh
 
-bash es.sh;sudo bash Kafka_Setup_Script.sh; bash mongod.sh
+cd /datadrive/;bash es.sh;cd /datadrive/;sudo bash Kafka_Setup_Script.sh;cd /datadrive/; bash mongod.sh
