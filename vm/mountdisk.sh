@@ -12,37 +12,53 @@ sudo echo UUID=\"`(blkid /dev/sd${drive}1 -s UUID -o value)`\" /datadrive       
 sudo chown azureuser:azureuser /datadrive
 
 cd /datadrive; wget "https://naiglobalstrg.blob.core.windows.net/psfiles/all.tar.gz"; tar xf all.tar.gz
-
-#cd /datadrive/; sudo chmod -R 777 bashrc_set.sh; ./bashrc_set.sh
-
-echo "Exporting Java Path..."
-echo '' >> ~/.bashrc
-echo 'export JAVA_HOME="/datadrive/jdk1.8.0_144"' >> ~/.bashrc
-echo 'export PATH="{$PATH}:${JAVA_HOME}/bin/"' >> ~/.bashrc
-eval "$(cat ~/.bashrc | tail -n +10)" 
+cd /datadrive/; wget "https://sinkstrgadf.blob.core.windows.net/sink/bashrc_set4.sh"
+cd /datadrive/; wget "https://sinkstrgadf.blob.core.windows.net/sink/extractfile_mani.sh"
 
 
-
-echo '##' >> ~/.bashrc
-echo '##### KAFKA ########' >> ~/.bashrc
-echo 'export PATH=$PATH:/datadrive/kafka_2.12-2.6.0/bin' >> ~/.bashrc
-echo 'export KAFKA_HOME=/datadrive/kafka_2.12-2.6.0' >> ~/.bashrc
-eval "$(cat ~/.bashrc | tail -n +10)" 
-
-
-echo "export HADOOP_HOME=/usr/local/hadoop" >> ~/.bashrc
-echo "export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop" >> ~/.bashrc
-echo "export HADOOP_MAPRED_HOME=/usr/local/hadoop" >> ~/.bashrc
-echo "export HADOOP_COMMON_HOME=/usr/local/hadoop" >> ~/.bashrc
-echo "export HADOOP_HDFS_HOME=/usr/local/hadoop" >> ~/.bashrc
-echo "export YARN_HOME=/usr/local/hadoop" >> ~/.bashrc
-eval "$(cat ~/.bashrc | tail -n +10)" 
-
+cd /datadrive/; chmod -R 777 extractfile_mani.sh; ./extractfile_mani.sh
 sleep 5
 
-cd /datadrive/; sudo chmod -R 777 es.sh; ./es.sh
-cd /datadrive/; sudo chmod -R 777 Kafka_Setup_Script.sh; ./Kafka_Setup_Script.sh
-cd /datadrive/; sudo chmod -R 777 jupyter.sh; ./jupyter.sh
-cd /datadrive/; sudo chmod -R 777 python_R_sap.sh; ./python_R_sap.sh
-cd /datadrive/; sudo chmod -R 777 Drool_Step_2.sh; ./Drool_Step_2.sh
+sleep 5
+echo "KAFKA_BROKER=node1:9092"
+echo "KAFKA_BROKER=node1:9092" >> ~/.bashrc
 
+echo "PATH=$PATH:$NODE_HOME/bin"
+echo "PATH=$PATH:$NODE_HOME/bin" >> ~/.bashrc
+
+echo "MONGO_HOME=/datadrive/mongodb-linux-x86_64-ubuntu1604-4.2.8"
+echo "MONGO_HOME=/datadrive/mongodb-linux-x86_64-ubuntu1604-4.2.8" >> ~/.bashrc
+
+echo "PATH=$PATH:$MONGO_HOME/bin"
+echo "PATH=$PATH:$MONGO_HOME/bin" >> ~/.bashrc
+
+echo "JAVA_HOME=/datadrive/jdk1.8.0_144"
+echo "JAVA_HOME=/datadrive/jdk1.8.0_144" >> ~/.bashrc
+
+echo "PATH=$PATH:$JAVA_HOME/bin/"
+echo "PATH=$PATH:$JAVA_HOME/bin/" >> ~/.bashrc
+
+echo "KAFKA_HOME=/datadrive/kafka_2.12-2.6.0"
+echo "KAFKA_HOME=/datadrive/kafka_2.12-2.6.0" >> ~/.bashrc
+
+echo "PATH=$PATH:/datadrive/kafka_2.12-2.6.0/bin"
+echo "PATH=$PATH:/datadrive/kafka_2.12-2.6.0/bin" >> ~/.bashrc
+
+sleep 3
+
+source ~/.bashrc
+
+sleep 3
+
+cd /datadrive/; chmod -R 777 es.sh; ./es.sh
+cd /datadrive/; chmod -R 777 Kafka_Setup_Script.sh; ./Kafka_Setup_Script.sh
+cd /datadrive/; chmod -R 777 jupyter.sh; ./jupyter.sh
+cd /datadrive/; chmod -R 777 python_R_sap.sh; ./python_R_sap.sh
+cd /datadrive/; chmod -R 777 Drool_Step_2.sh; ./Drool_Step_2.sh
+#sed -i 's/10.2.0.7/'172.16.1.68'/g' /datadrive/all_tomcat/apache-tomcat-drools-8.5/bin/setenv.sh
+#cd /datadrive/all_tomcat/apache-tomcat-drools-8.5/bin; ./startup.sh
+
+cd /datadrive/; chmod -R 777 mongod.sh; ./mongod.sh
+cd /datadrive/; chmod -R 777 install_hadoop.sh; ./install_hadoop.sh
+cd /datadrive/; chmod -R 777 nginx.sh; ./nginx.sh
+cd /datadrive/; chmod -R 777 monitoringAndSAS.sh; ./monitoringAndSAS.sh
