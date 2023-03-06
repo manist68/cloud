@@ -31,7 +31,7 @@ echo "MONGO_HOME=/datadrive/mongodb-linux-x86_64-ubuntu1604-4.2.8" >> ~/.bashrc
 
 echo "PATH=$PATH:$MONGO_HOME/bin"
 echo "PATH=$PATH:$MONGO_HOME/bin" >> ~/.bashrc
-
+#
 echo "JAVA_HOME=/datadrive/jdk1.8.0_144"
 echo "JAVA_HOME=/datadrive/jdk1.8.0_144" >> ~/.bashrc
 
