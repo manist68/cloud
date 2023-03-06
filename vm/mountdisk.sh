@@ -50,8 +50,8 @@ source ~/.bashrc
 
 sleep 3
 
-cd /datadrive/; chmod -R 777 es.sh; ./es.sh
-cd /datadrive/; chmod -R 777 Kafka_Setup_Script.sh; ./Kafka_Setup_Script.sh
+cd /datadrive/; sudo chmod -R 777 es.sh; source es.sh
+cd /datadrive/; sudo chmod -R 777 Kafka_Setup_Script.sh; sudo ./Kafka_Setup_Script.sh
 cd /datadrive/; chmod -R 777 jupyter.sh; ./jupyter.sh
 cd /datadrive/; chmod -R 777 python_R_sap.sh; ./python_R_sap.sh
 cd /datadrive/; chmod -R 777 Drool_Step_2.sh; ./Drool_Step_2.sh
